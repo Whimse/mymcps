@@ -1,0 +1,44 @@
+
+
+[tool.poetry]
+name = "mymcp"
+version = "0.0.1"
+description = "MyMCP"
+authors = ["AntonioLRL <antonio.l.rodriguez.lopez@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "mymcp", from = "src" },
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.11.0,<3.13"
+docker = "7.1.0"
+tabulate = "0.9.0"
+markdownify = "1.0.0"
+fredapi = "0.5.2"
+duckduckgo_search = "7.5.0"
+selenium = "4.7.2"
+pyvirtualdisplay = "3.0"
+GoogleNews = "1.6.15"
+youtube-transcript-api = "1.1.1"
+webdriver_manager = "4.0.2"
+google-api-python-client ="2.172.0"
+praw = "7.8.1"
+fastmcp = ">=3.0.0"
+crawl4ai = "^0.8.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+mcp-reddit = "mymcp.reddit.server:run"
+mcp-youtube = "mymcp.youtube.server:run"
+mcp-crawl4ai = "mymcp.crawl4ai.server:run"
+mcp-docker = "mymcp.docker.server:run"
+mcp-google-scholar = "mymcp.google_scholar.server:run"
+mcp-telegram = "mymcp.telegram.server:run"
+#mcp-duckduckgo-search = "mymcp.duckduckgo_search.server:run"
+#mcp-google-news = "mymcp.google_news.server:run"
+#mcp-google-search = "mymcp.google_search.server:run"
