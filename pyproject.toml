@@ -29,7 +29,7 @@ dependencies = [
     #"fastmcp>=3.0.0",
     #"crawl4ai>=0.8.6",
     #"langchain-core>=0.3.76",
-    #"langchain-litellm==0.3.0",
+    "langchain-litellm==0.3.0",
 ]
 
 [project.scripts]
