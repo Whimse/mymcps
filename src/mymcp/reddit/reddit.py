@@ -94,8 +94,6 @@ def reddit_submission_to_URL(submission, just_headline = False) -> Resource:
         comments = None if just_headline else parse_comments(submission.comments)  
         )
 
-
-
 def check_time_filter(time_filter):
     valid_time_filters = ['all', 'year', 'month', 'week', 'day', 'hour']
     if time_filter not in valid_time_filters:
@@ -108,15 +106,9 @@ def URLs_to_headlines(URLs:List[Resource]) -> List[Resource]:
 class RedditCrawler:
     def __init__(
             self,
-            cache_path: str,
             num_posts: int = 10,
         ):
-        #self.text_processor = text_processor
-        self.cache_path = cache_path
         self.num_posts = num_posts
-        
-        # Create folder for subreddit, if it does not exist
-        os.makedirs(self.cache_path, exist_ok=True)
         
         reddit_credentials = dict(
             client_id = os.environ.get('REDDIT_CLIENT_ID', None),
@@ -137,57 +129,22 @@ class RedditCrawler:
         else:
             return self.reddit.subreddit(subreddit)
         
-           
-    '''  
+             
     def __submissions_to_URLs(
         self,
         submissions,
-        time_delay:int = 0.0,
-        just_headlines:bool = False,
+        time_delay: int = 0,
+        just_headlines: bool = False,
         ) -> List[Resource]:
                 
         stories = []
 
-        # Go through top submissions, extracting and saving info
-        for submission in submissions:
-            try:
-                url:Resource = Resource.deserialize(self.cache_path, "https://www.reddit.com" + submission.permalink)
-            except FileNotFoundError as e:
-                url:Resource = reddit_submission_to_URL(submission, just_headlines)
-                url.serialize(self.cache_path)
-                time.sleep(time_delay)
-
-            stories.append(url)
-
-        return stories
-    '''
-    
-    def __submissions_to_URLs(
-        self,
-        submissions,
-        time_delay: int = 0.0,
-        just_headlines: bool = False,
-    ) -> List[Resource]:
-        stories = []
         for submission in submissions:
             url: Resource = reddit_submission_to_URL(submission, just_headlines)
             time.sleep(time_delay)
             stories.append(url)
+
         return stories
-    
-    '''           
-    def new_submissions(self, subreddit: str = "all"):
-        """Retrieve the newest submissions from a subreddit."""
-        return self.__get_node(subreddit).new(limit=self.num_posts)
-
-    def hot_submissions(self, subreddit: str = "all", num_posts: int = 10):
-        """Retrieve the hottest submissions from a subreddit."""
-        return self.__get_node(subreddit).hot(limit=num_posts)
-
-    def controversial_submissions(self, subreddit: str = "all", time_filter: TimeFilter = TimeFilter.all, num_posts: int = 10):
-        """Retrieve controversial submissions from a subreddit based on time filter."""
-        return self.__get_node(subreddit).controversial(limit=num_posts, time_filter=time_filter.name)
-    '''
 
     def get_top_headlines_in_subreddit(self, subreddit: str, time_filter: str) -> List[Resource]:
         """
@@ -202,7 +159,7 @@ class RedditCrawler:
         """        
         check_time_filter(time_filter)
         submissions = self.__get_node(subreddit).top(limit=self.num_posts, time_filter=time_filter)
-        return self.__submissions_to_URLs(submissions, just_headlines = True)
+        return self.__submissions_to_URLs(submissions, just_headlines=True)
 
 
     def get_top_submissions_in_subreddit(self, subreddit: str, time_filter: str) -> List[Resource]:
@@ -318,27 +275,10 @@ class RedditCrawler:
         """
         assert submission_url.startswith('https://www.reddit.com/r')
 
-        try:
-            return Resource.deserialize(self.cache_path, submission_url)
-
-        except FileNotFoundError:
-            # Extract submission ID from the URL
-            # Expected format: https://www.reddit.com/r/<sub>/comments/<id>/<slug>/
-            submission_id = submission_url.strip('/').split('/')[6]
-            submission = self.reddit.submission(id=submission_id)
-
-            # Expand "MoreComments" placeholders so all comments are loaded
-            submission.comments.replace_more(limit=None)
-
-            url = reddit_submission_to_URL(submission)
-            url.serialize(self.cache_path)
-
-            return url     
-
-
-    def get_submission(self, submission_url: str) -> Resource:
-        assert submission_url.startswith('https://www.reddit.com/r')
         submission_id = submission_url.strip('/').split('/')[6]
         submission = self.reddit.submission(id=submission_id)
         submission.comments.replace_more(limit=None)
+
         return reddit_submission_to_URL(submission)
+    
+    
