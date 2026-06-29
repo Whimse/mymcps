@@ -94,6 +94,8 @@ def reddit_submission_to_URL(submission, just_headline = False) -> Resource:
         comments = None if just_headline else parse_comments(submission.comments)  
         )
 
+
+
 def check_time_filter(time_filter):
     valid_time_filters = ['all', 'year', 'month', 'week', 'day', 'hour']
     if time_filter not in valid_time_filters:
@@ -135,7 +137,8 @@ class RedditCrawler:
         else:
             return self.reddit.subreddit(subreddit)
         
-             
+           
+    '''  
     def __submissions_to_URLs(
         self,
         submissions,
@@ -156,6 +159,20 @@ class RedditCrawler:
 
             stories.append(url)
 
+        return stories
+    '''
+    
+    def __submissions_to_URLs(
+        self,
+        submissions,
+        time_delay: int = 0.0,
+        just_headlines: bool = False,
+    ) -> List[Resource]:
+        stories = []
+        for submission in submissions:
+            url: Resource = reddit_submission_to_URL(submission, just_headlines)
+            time.sleep(time_delay)
+            stories.append(url)
         return stories
     
     '''           
@@ -317,3 +334,11 @@ class RedditCrawler:
             url.serialize(self.cache_path)
 
             return url     
+
+
+    def get_submission(self, submission_url: str) -> Resource:
+        assert submission_url.startswith('https://www.reddit.com/r')
+        submission_id = submission_url.strip('/').split('/')[6]
+        submission = self.reddit.submission(id=submission_id)
+        submission.comments.replace_more(limit=None)
+        return reddit_submission_to_URL(submission)
