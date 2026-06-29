@@ -6,7 +6,7 @@ def run():
 
     tools = []
 
-    reddit_crawler = RedditCrawler(".reddit_cache", 5)
+    reddit_crawler = RedditCrawler(10)
 
     tools += [
         reddit_crawler.get_top_submission_headers_in_subreddit, 
