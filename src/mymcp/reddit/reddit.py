@@ -286,38 +286,34 @@ class RedditCrawler:
 
     #####################
     # Single submission
-    #####################    
-    def get_submission(self, submission_url: str) -> str:
+    #####################   
+    def get_submission(self, submission_url: str) -> Resource:
         """
-        Retrieves the whole content of a Reddit submission, including full body and top comments
+        Retrieves the whole content of a Reddit submission, including
+        full body and top comments.
 
         Args:
             submission_url (str): The submission URL.
-            
+
         Returns:
-            str: The full contents of the submission, including full body and top comments and body.
+            Resource: The full contents of the submission, including
+                      full body and top comments.
         """
         assert submission_url.startswith('https://www.reddit.com/r')
-        return Resource.deserialize(self.cache_path, submission_url)
 
-    '''
-    def query_submission(self, submission_url: str, question: str) -> str:
-        """
-        Provides the answer to a question specific to the contents of a Reddit submission.
+        try:
+            return Resource.deserialize(self.cache_path, submission_url)
 
-        Args:
-            submission_url (str): The submission URL
-            question (str): A question related to the Reddit submission contents
-            
-        Returns:
-            str: The answer to the question.
+        except FileNotFoundError:
+            # Extract submission ID from the URL
+            # Expected format: https://www.reddit.com/r/<sub>/comments/<id>/<slug>/
+            submission_id = submission_url.strip('/').split('/')[6]
+            submission = self.reddit.submission(id=submission_id)
 
-        """
-        
-        assert self.text_processor
-        
-        submission = self.get_submission(submission_url)
-        
-        return query_document(self.text_processor, submission, question)
-    '''
+            # Expand "MoreComments" placeholders so all comments are loaded
+            submission.comments.replace_more(limit=None)
 
+            url = reddit_submission_to_URL(submission)
+            url.serialize(self.cache_path)
+
+            return url     
