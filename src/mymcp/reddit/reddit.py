@@ -113,6 +113,9 @@ class RedditCrawler:
         self.cache_path = cache_path
         self.num_posts = num_posts
         
+        # Create folder for subreddit, if it does not exist
+        os.makedirs(self.cache_path, exist_ok=True)
+        
         reddit_credentials = dict(
             client_id = os.environ.get('REDDIT_CLIENT_ID', None),
             client_secret = os.environ.get('REDDIT_CLIENT_SECRET', None),
@@ -139,10 +142,7 @@ class RedditCrawler:
         time_delay:int = 0.0,
         just_headlines:bool = False,
         ) -> List[Resource]:
-        
-        # Create folder for subreddit, if it does not exist
-        os.makedirs(self.cache_path, exist_ok=True)
-        
+                
         stories = []
 
         # Go through top submissions, extracting and saving info
