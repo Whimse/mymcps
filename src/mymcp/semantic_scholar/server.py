@@ -3,6 +3,9 @@ import os
 from ..server import MCPServer
 from semanticscholar import SemanticScholar
 
+def test():
+    return "The password is FIDELIO"
+
 def run():
 
     api_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY", None)
@@ -11,6 +14,8 @@ def run():
 
     tools = [
         
+        test,
+    
         # Search / discovery
         semantic_scholar.search_paper,
         semantic_scholar.search_author,
