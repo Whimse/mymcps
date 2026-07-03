@@ -123,7 +123,7 @@ class MCPServer:
     
     def start(self, tools):
 
-        rate_limited_tools =  [ rate_limited(tools, self.args.request_interval) ]
+        rate_limited_tools =  [ rate_limited(self.args.request_interval)(tool) for tool in tools ]
         
         mcp = FastMCP("MyServer")
         mcp.add_middleware(LoggingMiddleware(mcp, rate_limited_tools))

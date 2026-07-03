@@ -41,7 +41,7 @@ mcp-crawl4ai = "mymcp.crawl4ai.server:run"
 mcp-docker = "mymcp.docker.server:run"
 mcp-google-scholar = "mymcp.google_scholar.server:run"
 mcp-telegram = "mymcp.telegram.server:run"
-mcp-semantic-scholar = "mymcp.semantic_scholar:run"
+mcp-semantic-scholar = "mymcp.semantic_scholar.server:run"
 
 [build-system]
 requires = ["hatchling"]
