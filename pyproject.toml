@@ -8,10 +8,10 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [
-    "fastmcp>=3.0.0",         
-    "langchain-core>=0.3.76", 
-    "praw==7.8.1",            
-    "python-dateutil>=2.8.2", 
+    "fastmcp>=3.0.0",
+    "langchain-core>=0.3.76",
+    "praw==7.8.1",
+    "python-dateutil>=2.8.2",
     "jinja2>=3.1.3",
     "numpy>=1.26.0",                # <--- ADD THIS LINE
     #"docker==7.1.0",
@@ -30,7 +30,8 @@ dependencies = [
     #"crawl4ai>=0.8.6",
     #"langchain-core>=0.3.76",
     "langchain-litellm==0.3.0",
-    "beautifulsoup4>=4.12.3",       # <--- ADD THIS LINE    
+    "beautifulsoup4>=4.12.3",       # <--- ADD THIS LINE
+    "semanticscholar>=0.12.0",
 ]
 
 [project.scripts]

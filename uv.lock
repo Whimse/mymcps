@@ -1198,6 +1198,7 @@ dependencies = [
     { name = "numpy" },
     { name = "praw" },
     { name = "python-dateutil" },
+    { name = "semanticscholar" },
     { name = "youtube-transcript-api" },
 ]
 
@@ -1212,6 +1213,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26.0" },
     { name = "praw", specifier = "==7.8.1" },
     { name = "python-dateutil", specifier = ">=2.8.2" },
+    { name = "semanticscholar", specifier = ">=0.12.0" },
     { name = "youtube-transcript-api", specifier = "==1.1.1" },
 ]
 
@@ -1891,6 +1893,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/1c/03/e834bcd866f2f8a49a85eaff47340affa3bfa391ee9912a952a1faa68c7b/secretstorage-3.5.0.tar.gz", hash = "sha256:f04b8e4689cbce351744d5537bf6b1329c6fc68f91fa666f60a380edddcd11be", size = 19884, upload-time = "2025-11-23T19:02:53.191Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b7/46/f5af3402b579fd5e11573ce652019a67074317e18c1935cc0b4ba9b35552/secretstorage-3.5.0-py3-none-any.whl", hash = "sha256:0ce65888c0725fcb2c5bc0fdb8e5438eece02c523557ea40ce0703c266248137", size = 15554, upload-time = "2025-11-23T19:02:51.545Z" },
+]
+
+[[package]]
+name = "semanticscholar"
+version = "0.12.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "tenacity" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ff/1a/60fbb6096ed06d9d485e67b9778e60550ef12273ca124e9c82c06cf3b8d4/semanticscholar-0.12.0.tar.gz", hash = "sha256:174bb0129853480d2e659d8726ce0306a1f6f3817d1bc7a4bdd53b45a4984eb9", size = 30884, upload-time = "2026-03-29T20:07:23.842Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b7/84/9b273b7ae0946e1b311ec651605c9c229d0553863dcc6c5a315150c5f7ef/semanticscholar-0.12.0-py3-none-any.whl", hash = "sha256:bffa484dd08e5c8041eaec357a46ec44838c79a0cfd4ddea20d09f84d350a830", size = 28289, upload-time = "2026-03-29T20:07:23.019Z" },
 ]
 
 [[package]]

@@ -1,7 +1,39 @@
 import argparse
 import logging
+import time
+import threading
+import functools
+
 from fastmcp import FastMCP
 from fastmcp.server.middleware import Middleware, MiddlewareContext
+
+
+def rate_limited(min_interval: float):
+    """Decorator that ensures calls to the wrapped function are at least
+    `min_interval` seconds apart, across all callers (thread-safe).
+
+    If min_interval <= 0, the decorator is a no-op and returns the
+    original function unmodified.
+    """
+    if min_interval <= 0:
+        return lambda func: func
+
+    lock = threading.Lock()
+    last_call = {"t": 0.0}
+
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            with lock:
+                now = time.monotonic()
+                wait = last_call["t"] + min_interval - now
+                if wait > 0:
+                    time.sleep(wait)
+                last_call["t"] = time.monotonic()
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
 
 class LoggingMiddleware(Middleware):
     
@@ -56,6 +88,14 @@ class MCPServer:
             help="Enable INFO logging output.",
         )    
 
+        self.parser.add_argument(
+            "-i",
+            "--request_interval",
+            type=float,
+            default=0.0,
+            help="Minimal time between requests (seconds).",
+        )    
+
         self.__args = None
 
     def add_argument(self, *args, **kwargs):
@@ -82,13 +122,14 @@ class MCPServer:
         return self.__args
     
     def start(self, tools):
-                
+
+        rate_limited_tools =  [ rate_limited(tools, self.args.request_interval) ]
+        
         mcp = FastMCP("MyServer")
-        mcp.add_middleware(LoggingMiddleware(mcp, tools))
+        mcp.add_middleware(LoggingMiddleware(mcp, rate_limited_tools))
         
         if self.args.server:
             mcp.run(transport="http", host="127.0.0.1", port=8000, show_banner=self.args.verbose)
         else:
             mcp.run(transport="stdio", show_banner=self.args.verbose)
 
-            
