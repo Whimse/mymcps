@@ -96,7 +96,7 @@ def run():
         semantic_scholar.get_recommended_papers,
     ]
 
-    tools = [ to_json(max_items=15)(tool) for tool in tools ]
+    tools = [ to_json()(tool) for tool in tools ]
 
     server = MCPServer()
     server.start(tools)
