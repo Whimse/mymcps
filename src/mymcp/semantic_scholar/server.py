@@ -25,9 +25,12 @@ def to_json(max_items=100, indent=2, as_string=True):
     """
     def decorator(func):
         @wraps(func)
+        
         def wrapper(*args, **kwargs):
             result = func(*args, **kwargs)
-            converted = _convert(result, max_items)
+            effective_max = kwargs.get("limit", max_items)
+            cap = min(max_items, effective_max) if effective_max else max_items
+            converted = _convert(result, cap)
             if as_string:
                 return json.dumps(converted, indent=indent, default=str)
             return converted
@@ -67,6 +70,7 @@ def _convert(obj, max_items):
     # Already a primitive/dict
     return obj
 
+
 def run():
 
     api_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY", None)
@@ -92,7 +96,7 @@ def run():
         semantic_scholar.get_recommended_papers,
     ]
 
-    tools = [ to_json(tool) for tool in tools ]
+    tools = [ to_json(max_items=15)(tool) for tool in tools ]
 
     server = MCPServer()
     server.start(tools)
