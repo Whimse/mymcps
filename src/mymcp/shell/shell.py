@@ -68,7 +68,7 @@ class CommandResult:
         )
 
 
-class BashShell:
+class Shell:
     """
     A persistent, stateful bash session.
 
@@ -369,7 +369,7 @@ class BashShell:
     # Context manager support
     # ------------------------------------------------------------------ #
 
-    def __enter__(self) -> "BashShell":
+    def __enter__(self) -> "Shell":
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
