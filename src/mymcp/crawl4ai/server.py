@@ -7,9 +7,7 @@ crawler = Crawler()
 def run():
 
     crawler = Crawler()
-
-    tools = [ crawler.crawl_tool ]
     
     server = MCPServer()
-    server.start(tools)
+    server.start(crawler.tools)
 
