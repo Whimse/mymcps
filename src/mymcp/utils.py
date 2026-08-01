@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 #from langchain_core.prompts import ChatPromptTemplate
 #from langchain_litellm import ChatLiteLLM
 
+'''
 def instance_from_json(cls, json_file:str):
     """
     Create an instance of the given class `cls`,
@@ -18,7 +19,7 @@ def instance_from_json(cls, json_file:str):
 
     return cls(**params)
 
-'''
+
 def load_model(json_file:str):
     
     with open(json_file, "r") as f:
