@@ -28,21 +28,13 @@ from crawl4ai import (
     ProxyConfig,
 )
 
-from ...config import Config
-from ...context.tools import ToolSet
 from crawl4ai.async_logger import AsyncLogger, LogLevel
 import warnings
 
 class Crawler:
     
-    def __init__(self,
-        config: Config,
-        # Get paths with command line 'crwl profiles / 1. List profiles'
-        #user_data_dir = None
-        ):
+    def __init__(self):
         
-        user_data_dir = config.path / "web_crawling_data"
-
         self.proxy_config = None        
         
         try:        
@@ -54,10 +46,8 @@ class Crawler:
         except KeyError as e:
             warn_msg = f"Could not find proxy config variables in environment: {', '.join(e.args)}. Launching crawler without proxy"
             warnings.warn(warn_msg, UserWarning)            
-
         
-        self.user_data_dir = user_data_dir
-        self.config = config
+        self.browser_data_dir = os.environ['BROWSER_DATA_PATH']
     
     # make the tool method async
     async def crawl_failsafe(self, url: str):
@@ -146,7 +136,7 @@ class Crawler:
         browser_config = BrowserConfig(
             verbose=False, 
             headless=headless,
-            user_data_dir=None if incognito else self.user_data_dir,
+            user_data_dir=None if incognito else self.browser_data_dir,
             use_managed_browser=True,
             proxy_config = self.proxy_config if use_proxy else BrowserConfig().proxy_config,
             extra_args=extra_args,
@@ -175,5 +165,5 @@ class Crawler:
         if self.proxy_config:
             tools += [ self.crawl_proxy ]
             
-        return ToolSet(tools)
+        return tools
     
