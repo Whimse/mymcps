@@ -2,8 +2,8 @@ import os
 import numpy as np
 import json
 from urllib.parse import urlparse  
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_litellm import ChatLiteLLM
+#from langchain_core.prompts import ChatPromptTemplate
+#from langchain_litellm import ChatLiteLLM
 
 def instance_from_json(cls, json_file:str):
     """
@@ -18,6 +18,7 @@ def instance_from_json(cls, json_file:str):
 
     return cls(**params)
 
+'''
 def load_model(json_file:str):
     
     with open(json_file, "r") as f:
@@ -32,6 +33,7 @@ def load_model(json_file:str):
     model = ChatLiteLLM(**params)
     
     return model
+'''
 
 import re
 
@@ -77,6 +79,7 @@ def extract_http_links(text: str) -> list[str]:
     return cleaned_links
 
 
+'''
 def query_document(model, document: str, question: str) -> str:
     """Ask a question about a document using a LangChain chat model."""
     prompt = ChatPromptTemplate.from_messages([
@@ -101,7 +104,7 @@ def update_document(model, document: str, instructions: str) -> str:
     response = chain.invoke({"document": document, "instructions": instructions})
     
     return response.content if hasattr(response, "content") else str(response)
-
+'''
     
 class UnionFind:
     """Union–Find with path‑compression and union‑by‑rank."""
